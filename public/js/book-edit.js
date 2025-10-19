@@ -43,8 +43,9 @@ function closeEditPopup() {
 
 if (closeEditModal) closeEditModal.addEventListener('click', closeEditPopup);
 if (cancelEditBtn) cancelEditBtn.addEventListener('click', closeEditPopup);
+if (editOverlay) editOverlay.addEventListener('click', closeEditPopup);
 
-// validate + save
+
 document.getElementById('editForm').addEventListener('submit', function(e) {
   e.preventDefault();
 
@@ -82,4 +83,3 @@ document.getElementById('editForm').addEventListener('submit', function(e) {
   closeEditPopup();
 });
 
-if (editOverlay) editOverlay.addEventListener('click', closeEditPopup);
