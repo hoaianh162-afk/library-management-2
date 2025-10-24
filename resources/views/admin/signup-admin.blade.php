@@ -73,7 +73,7 @@
     </main>
 
     {{-- Footer --}}
-    @include('admin.layouts.footer-signup-admin')
+    @include('admin.layouts.footer-homepage-admin')
 
   </div>
   <script src="{{ asset('js/password-toggle.js') }}"></script>

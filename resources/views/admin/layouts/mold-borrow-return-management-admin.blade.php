@@ -59,6 +59,6 @@
             <img src="{{ asset('images/icon-group-admin-greyblack.png') }}" alt="Admin icon"> Quản trị viên
           </span>
           
-          <a href="{{ url('homepage-admin') }}" class="home">Trang chủ</a>
+          <a href="{{ url('/admin/homepage-admin') }}" class="home">Trang chủ</a>
         </div>
       </header>

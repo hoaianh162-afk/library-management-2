@@ -44,4 +44,4 @@
     </form>
 </main>
 
-@include('admin.layouts.footer-login-admin')
+@include('admin.layouts.footer-homepage-admin')
