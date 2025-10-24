@@ -27,7 +27,7 @@
             <h1>Đăng nhập</h1>
             <p class="desc">Đăng nhập vào tài khoản của bạn để tiếp tục</p>
 
-            <form class="login-form" action="{{ url('/user/login') }}" method="POST">
+            <form class="login-form" action="{{ url('/user/homepage-user') }}">
                 @csrf
 
                 {{-- Email --}}
