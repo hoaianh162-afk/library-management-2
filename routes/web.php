@@ -62,50 +62,28 @@ Route::get('admin/finemoney-management-admin', function () {
     return view('admin.finemoney-management-admin');
 });
 
-Route::get('user/tranglichsumuontra', function () {
-    return view('user.tranglichmuontra');
+Route::get('user/homepage-user', function () {
+    return view('user.homepage-user');
 });
 
-Route::get('user/content-all-lsmn', function () {
-    return view('user.content-all-lsmn');
+Route::get('user/info-user', function () {
+    return view('user.info-user');
 });
 
-Route::get('user/content-datra-lsmn', function () {
-    return view('user.content-datra-lsmn');
+Route::get('user/setting-user', function () {
+    return view('user.setting-user');
 });
 
-Route::get('user/content-dangmuon-lsmn', function () {
-    return view('user.content-dangmuon-lsmn');
+Route::get('user/help-user', function () {
+    return view('user.help-user');
 });
 
-Route::get('user/content-tratre-lsmn', function () {
-    return view('user.content-tratre-lsmn');
+Route::get('user/search-book-user', function () {
+    return view('user.search-book-user');
 });
 
-Route::get('user/content-datcho', function () {
-    return view('user.content-datcho');
-});
-
-Route::get('user/datchosach', function () {
-    return view('user.datchosach');
-});
-
-Route::get('user/content-datchosach', function () {
-    return view('user.content-datchosach');
-});
-
-Route::get('user/content-sachhot', function () {
-    return view('user.content-sachhot');
-});
-
-Route::get('user/trangmuontra(sachdangmuon)', function () {
-    return view('user.trangmuontra(sachdangmuon)');
-});
-
-Route::get('user/content-mtra-sachdangmuon', function () {
-    return view('user.content-mtra-sachdangmuon');
-});
-
-Route::get('user/content-mtra-muonsachmoi', function () {
-    return view('user.content-mtra-muonsachmoi');
+Route::prefix('user')->group(function () {
+    Route::view('/trangphat', 'user.trangphat')->name('user.trangphat');
+    Route::view('/content-trangphat', 'user.content-trangphat');
+    Route::view('/content-trangphat-thanhtoan', 'user.content-trangphat-thanhtoan');
 });
