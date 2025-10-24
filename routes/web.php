@@ -57,3 +57,7 @@ Route::get('/reader-management-admin', function () {
 Route::get('/borrow-return-management-admin', function () {
     return view('borrow-return-management-admin');
 });
+
+Route::get('/finemoney-management-admin', function () {
+    return view('finemoney-management-admin');
+});
