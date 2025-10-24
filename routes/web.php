@@ -49,3 +49,7 @@ Route::get('/book-management-admin', function () {
 Route::get('/category-management-admin', function () {
     return view('category-management-admin');
 });
+
+Route::get('/reader-management-admin', function () {
+    return view('reader-management-admin');
+});

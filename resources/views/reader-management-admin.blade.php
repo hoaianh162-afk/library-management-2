@@ -1,70 +1,7 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý độc giả - Reader Management</title>
-  <link rel="stylesheet" href="css/reader-management-admin.css">
-  <link rel="stylesheet" href="css/mold-dashboard-admin.css">
-</head>
-<body>
-  <div class="container">
-    <!-- Thanh Menu -->
-    <aside class="sidebar">
+@include('layouts.mold-reader-management-admin')
 
-      <!-- Logo Admin -->
-      <div class="sidebar-title">
-        <div class="avatar">
-             <div class="avatar-icon">
-                <img src="images/iconstack.io - (User Lock 01)-admin.png" alt="Quản trị viên logo" />
-             </div>
-        </div>
-        
-      <span class="sidebar-text">Quản trị viên</span>
-      </div>
-
-      <!-- Các Menu -->
-      <nav>
-        <a href="dashboard-admin.html">
-          <img src="images/iconstack.io - (Layout Dashboard)-black.png" alt="Dashboard icon" class="icon-img">
-          Dashboard
-        </a>
-        <a href="book-management-admin.html">
-          <img src="images/iconstack.io - (Book 2)-black.png" alt="Quản lý sách" class="icon-edit-img">
-          Quản lý sách
-        </a>
-        <a href="category-management-admin.html">
-          <img src="images/thu-muc-black.png" alt="Quản lý danh mục" class="icon-img">
-          Quản lý danh mục
-        </a>
-        <a href="reader-management-admin.html" class="active">
-          <img src="images/doc-gia-orange.png" alt="Quản lý độc giả" class="icon-img">
-          Quản lý độc giả
-        </a>
-        <a href="borrow-return-management-admin.html">
-          <img src="images/iconstack.io - (Exchange 01)-black.png" alt="Quản lý mượn trả" class="icon-img">
-          Quản lý mượn/ trả
-        </a>
-        <a href="finemoney-management-admin.html">
-          <img src="images/tien-phat-black.png" alt="Quản lý phạt" class="icon-img">
-          Quản lý phạt
-        </a>
-      </nav>
-    </aside>
-
-    <!-- Main content -->
-    <main class="main">
-      <header class="header">
-        <div class="header-right">
-          <span class="admin">
-            <img src="images/icon-group-admin-greyblack.png" alt="Admin icon"> Quản trị viên
-          </span>
-          
-          <a href="homepage-admin.html" class="home">Trang chủ</a>
-        </div>
-      </header>
-
-      <!-- Nội dung chính -->
+{{-- Nội dung dashboard chính --}}
+<!-- Nội dung chính -->
       <section class="dashboard-content">
         <div class="dashboard-header">
           <h1 class="title">Quản lý độc giả</h1>
@@ -220,15 +157,12 @@
       </div>
 
       </section>
-    </main>
-  </div>
 
-  <script src="js/reader-filter.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="js/reader-export.js"></script>
-
-  <script src="js/reader-resetpw.js"></script>
-
+{{-- Scripts --}}
+<script src="{{ asset('js/reader-filter.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="{{ asset('js/reader-export.js') }}"></script>
+<script src="{{ asset('js/reader-resetpw.js') }}"></script>
 </body>
 </html>
