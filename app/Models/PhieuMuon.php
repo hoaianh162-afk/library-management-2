@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 
 class PhieuMuon extends Model
@@ -13,6 +15,11 @@ class PhieuMuon extends Model
     }
 
     public function chiTiets()
+    {
+        return $this->hasMany(PhieuMuonChiTiet::class, 'idPhieuMuon', 'idPhieuMuon');
+    }
+
+    public function chiTietPhieuMuon()
     {
         return $this->hasMany(PhieuMuonChiTiet::class, 'idPhieuMuon', 'idPhieuMuon');
     }

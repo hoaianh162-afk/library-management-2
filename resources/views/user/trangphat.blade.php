@@ -21,7 +21,7 @@
     <div id="main-content-4"></div>
 
     {{-- Footer --}}
-    @include('user.layouts.footer-homepage-login-user')
+    @include('user.layouts.footer-login-user')
   </div>
 
   {{-- JS tải nội dung --}}

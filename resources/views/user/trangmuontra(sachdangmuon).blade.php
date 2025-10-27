@@ -27,7 +27,7 @@
       <div id="main-content-3"></div>
     </div>
 
-    @include('user.layouts.footer-trangmuontra(sachdangmuon)')
+    @include('user.layouts.footer-login-user')
   </div>
 
   <script>

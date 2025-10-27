@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 
 class PhieuMuonChiTiet extends Model
@@ -17,6 +19,7 @@ class PhieuMuonChiTiet extends Model
         return $this->belongsTo(Sach::class, 'idSach', 'idSach');
     }
 
+
     // Thuộc tính ảo: lấy trạng thái của sách
     public function getTrangThaiAttribute()
     {
@@ -33,5 +36,17 @@ class PhieuMuonChiTiet extends Model
     public function getNguoiMuonAttribute()
     {
         return $this->phieuMuon ? $this->phieuMuon->nguoiDung->hoTen : null;
+    }
+
+    public function getLoaiYeuCauAttribute()
+    {
+        return strpos($this->trangThaiCT, 'returned') !== false ? 'returned' : 'borrowed';
+    }
+
+    public function scopeOnlyReaders($query)
+    {
+        return $query->whereHas('phieuMuon.nguoiDung', function ($q) {
+            $q->where('vaiTro', 'reader');
+        });
     }
 }

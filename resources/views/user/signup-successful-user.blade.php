@@ -30,7 +30,7 @@
   </div>
 
   {{-- Footer --}}
-  @include('user.layouts.footer-signup-successful-user')
+  @include('user.layouts.footer-login-user')
 
 </div>
 

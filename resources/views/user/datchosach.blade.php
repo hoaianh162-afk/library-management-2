@@ -26,7 +26,7 @@
         <div id="main-content-2"></div>
         </div>
 
-        @include('user.layouts.footer-datchosach')
+        @include('user.layouts.footer-login-user')
     </div>
 
     <script>

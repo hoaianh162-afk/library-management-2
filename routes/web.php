@@ -3,12 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminAuthController;
 
-Route::get('/', fn() => view('user.homepage-login-user'));
-Route::get('user/homepage-login-user', fn() => view('user.homepage-login-user'));
+
+
 Route::get('user/login-user', fn() => view('user.login-user'));
 Route::get('user/signup-user', fn() => view('user.signup-user'));
 Route::get('user/signup-successful-user', fn() => view('user.signup-successful-user'));
-Route::get('user/homepage-user', fn() => view('user.homepage-user'));
 Route::get('user/info-user', fn() => view('user.info-user'));
 Route::get('user/setting-user', fn() => view('user.setting-user'));
 Route::get('user/help-user', fn() => view('user.help-user'));
@@ -78,7 +77,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
 use App\Http\Controllers\Admin\CategoryController;
 
-    Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/category-management-admin', [CategoryController::class, 'index'])->name('admin.categories');
     Route::post('/category-management-admin', [CategoryController::class, 'store'])->name('admin.categories.store');
     Route::put('/category-management-admin/{id}', [CategoryController::class, 'update'])->name('admin.categories.update');
@@ -93,3 +92,50 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/reader-management-admin/export', [ReaderController::class, 'export'])->name('admin.readers.export');
     Route::put('/reader-management-admin/resetpw/{id}', [ReaderController::class, 'resetPassword'])->name('admin.readers.resetpw');
 });
+
+use App\Http\Controllers\Admin\BorrowReturnController;
+
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/borrow-return-management-admin', [BorrowReturnController::class, 'index'])
+        ->name('admin.borrow-returns');
+});
+Route::post('/admin/borrow-returns/{id}/update-status', [BorrowReturnController::class, 'updateStatus'])
+    ->name('admin.borrow-returns.update-status');
+
+use App\Http\Controllers\Admin\FineMoneyController;
+
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+
+    Route::get('/finemoney-management-admin', [FineMoneyController::class, 'index'])
+        ->name('admin.fine.index');
+
+    Route::post('/fine/{id}/toggle-status', [FineMoneyController::class, 'toggleStatus'])
+        ->name('admin.fine.toggleStatus');
+});
+
+use App\Http\Controllers\HomepageLoginController;
+
+Route::get('/', [HomepageLoginController::class, 'index']);
+Route::get('/user/homepage-login-user', [HomepageLoginController::class, 'index'])
+    ->name('user.homepage.login');
+
+use App\Http\Controllers\UserAuthController;
+
+Route::prefix('user')->group(function () {
+    Route::get('/login-user', [UserAuthController::class, 'showLoginForm'])->name('user.login');
+    Route::post('/login-user', [UserAuthController::class, 'login'])->name('user.login.submit');
+
+    Route::post('/logout', [UserAuthController::class, 'logout'])->name('user.logout');
+
+    Route::get('/homepage-user', [UserAuthController::class, 'homepage'])
+        ->middleware(['auth', 'role:reader']);
+});
+
+use App\Http\Controllers\User\HomepageUserController;
+
+Route::middleware(['auth', 'role:reader'])->group(function () {
+    Route::get('/user/homepage-user', [HomepageUserController::class, 'index'])
+        ->name('user.homepage-user');
+});
+
+

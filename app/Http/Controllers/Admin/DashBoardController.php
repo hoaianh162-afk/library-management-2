@@ -25,7 +25,7 @@ class DashBoardController extends Controller
 
         $totalReaders = NguoiDung::where('vaiTro', 'reader')->count();
 
-        $booksBorrowed = PhieuMuonChiTiet::where('trangThaiCT', 'borrowed')->count();
+        $booksBorrowed = PhieuMuonChiTiet::where('ghiChu', 'borrow')->count();
 
         $readers = NguoiDung::where('vaiTro', 'reader')->get();
 
@@ -42,7 +42,7 @@ class DashBoardController extends Controller
         return response()->json([
             'totalBooks' => Sach::count(),
             'totalReaders' => NguoiDung::where('vaiTro', 'reader')->count(),
-            'booksBorrowed' => PhieuMuonChiTiet::where('trangThaiCT', 'borrowed')->count()
+            'booksBorrowed' => PhieuMuonChiTiet::where('ghiChu', 'borrow')->count()
         ]);
     }
 

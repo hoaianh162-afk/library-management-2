@@ -22,7 +22,8 @@ class Sach extends Model
         'idDanhMuc',
         'moTa',
         'vitri',
-        'trangThai'
+        'trangThai',
+        'anhBia',
     ];
 
     // Quan hệ với danh mục

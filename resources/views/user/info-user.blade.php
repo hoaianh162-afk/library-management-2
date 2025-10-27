@@ -76,7 +76,7 @@
     </div>
 
     {{-- Include Footer --}}
-    @include('user.layouts.footer-homepage-login-user')
+    @include('user.layouts.footer-login-user')
   </div>
 
   {{-- Script --}}

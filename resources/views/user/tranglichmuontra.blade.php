@@ -58,7 +58,7 @@
         <div id="main-content"></div>
       </div>
 
-      @include('user.layouts.footer-tranglichsumuontra')
+      @include('user.layouts.footer-login-user')
     </div>
 
     {{-- ✅ SCRIPT: Giữ nguyên logic, chỉ chỉnh đường dẫn và tương thích Laravel --}}

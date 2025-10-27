@@ -1,12 +1,11 @@
 @extends('admin.layouts.mold-book-management-admin')
 
 @section('content')
-<section class="dashboard-content">
   <div class="dashboard-header">
     <h1 class="title">Quản lý sách</h1>
     <button class="btn-add-book" id="openAddBookModal">+ Thêm sách mới</button>
   </div>
-</section>
+
 
 <!-- Popup Thêm Sách Mới -->
 <div class="modal-overlay" id="modalOverlay"></div>

@@ -9,6 +9,9 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
+    
+
     public function up(): void
     {
         Schema::create('phieu_muon_chi_tiet', function (Blueprint $table) {
@@ -25,7 +28,6 @@ return new class extends Migration
             $table->foreign('idPhieuMuon')->references('idPhieuMuon')->on('phieu_muon')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('idSach')->references('idSach')->on('sach')->onDelete('restrict')->onUpdate('cascade');
         });
-
     }
 
     /**
@@ -33,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('phieumuonchitiet');
+        Schema::dropIfExists('phieu_muon_chi_tiet');
     }
 };

@@ -13,15 +13,17 @@ class NguoiDung extends Authenticatable
     protected $table = 'nguoi_dung';
     protected $primaryKey = 'idNguoiDung';
     protected $fillable = [
-        'hoTen', 'email', 'matKhau', 'soDienThoai', 'diaChi', 'vaiTro', 'ngayDangKy', 'trangThai'
+        'hoTen',
+        'email',
+        'matKhau',
+        'soDienThoai',
+        'diaChi',
+        'vaiTro',
+        'ngayDangKy',
+        'trangThai'
     ];
     protected $hidden = ['matKhau'];
     public $timestamps = true;
-
-    public function getAuthPassword()
-    {
-        return $this->matKhau;
-    }
 
     public function phieuMuons()
     {
@@ -31,22 +33,29 @@ class NguoiDung extends Authenticatable
     public function muonChiTiets()
     {
         return $this->hasManyThrough(
-            PhieuMuonChiTiet::class, 
-            PhieuMuon::class,        
-            'idNguoiDung',           
-            'idPhieuMuon',           
-            'idNguoiDung',           
-            'idPhieuMuon'            
+            PhieuMuonChiTiet::class,
+            PhieuMuon::class,
+            'idNguoiDung',
+            'idPhieuMuon',
+            'idNguoiDung',
+            'idPhieuMuon'
         );
     }
 
+    // Tổng số sách đã mượn
     public function getSoSachDaMuonAttribute()
     {
         return $this->muonChiTiets()->count();
     }
 
+    // Số sách đang mượn (trạng thái = borrowed)
     public function getSoSachDangMuonAttribute()
     {
-        return $this->muonChiTiets()->where('trangThaiCT', 'borrowed')->count();
+        return $this->muonChiTiets()->where('phieu_muon_chi_tiet.ghiChu', 'borrow')->count();
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->matKhau;
     }
 }

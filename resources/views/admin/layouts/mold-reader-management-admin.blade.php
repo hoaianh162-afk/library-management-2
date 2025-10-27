@@ -62,9 +62,7 @@
       </header>
 
       <!-- Nội dung động -->
-      <section class="dashboard-content">
         @yield('content')
-      </section>
     </main>
   </div>
 

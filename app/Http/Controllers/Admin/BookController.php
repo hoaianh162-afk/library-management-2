@@ -29,15 +29,13 @@ class BookController extends Controller
             'soLuong' => 'required|integer|min:1',
             'idDanhMuc' => 'required|exists:danh_muc,idDanhMuc',
             'moTa' => 'nullable|string',
-            //'vitri' => 'nullable|string|max:100',
-            //'trangThai' => 'required|string|max:20',
+            'vitri' => 'nullable|string|max:100',
         ]);
 
-        // Kiểm tra trùng mã hoặc tên sách
         $exists = Sach::where('maSach', $request->maSach)
-                    ->orWhere('tenSach', $request->tenSach)
-                    ->first();
-        
+            ->orWhere('tenSach', $request->tenSach)
+            ->first();
+
         if ($exists) {
             return response()->json([
                 'success' => false,
@@ -45,17 +43,27 @@ class BookController extends Controller
             ]);
         }
 
-        $book = Sach::create(array_merge(
-            $request->all(),
-            ['trangThai' => 'Còn sách']
-        ));
+        $book = new Sach();
+        $book->maSach = $request->maSach;
+        $book->tenSach = $request->tenSach;
+        $book->tacGia = $request->tacGia;
+        $book->namXuatBan = $request->namXuatBan;
+        $book->soLuong = $request->soLuong;
+        $book->idDanhMuc = $request->idDanhMuc;
+        $book->moTa = $request->moTa;
+        $book->vitri = $request->vitri ?? null;
+        $book->trangThai = 'Còn sách';
+
+        // Lưu vào database
+        $book->save();
 
         return response()->json([
             'success' => true,
-            'message' => 'Thêm sách thành công',
+            'message' => '✅ Thêm sách thành công',
             'book' => $book
         ]);
     }
+
 
     // Cập nhật sách
     public function update(Request $request, $id)
@@ -102,5 +110,4 @@ class BookController extends Controller
             'message' => 'Đã xóa sách thành công.'
         ]);
     }
-
 }

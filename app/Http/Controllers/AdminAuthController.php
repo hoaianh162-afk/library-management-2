@@ -35,7 +35,7 @@ class AdminAuthController extends Controller
         if ($user->vaiTro !== 'admin') {
             return back()
                 ->withInput($request->only('email'))
-                ->withErrors(['email' => 'Tài khoản này không có quyền admin.']);
+                ->withErrors(['email' => 'Tài khoản này không có quyền truy cập quản trị viên.']);
         }
 
         // Đăng nhập thành công

@@ -15,12 +15,15 @@
     <form class="login-form" method="POST" action="{{ route('admin.login.submit') }}">
         {{-- 🔹 CSRF bảo mật --}}
         @csrf
-        
+
         {{-- 🔹 Hiển thị thông báo lỗi (nếu có) --}}
-        @if($errors->any())
-            <div class="alert alert-danger" style="color:red; margin-bottom:10px;">
-                {{ $errors->first() }}
-            </div>
+        
+        @if ($errors->any())
+        <div style="color: red; font-weight: 600; margin-top: 10px;">
+            @foreach ($errors->all() as $error)
+            <p>⚠️ {{ $error }}</p>
+            @endforeach
+        </div>
         @endif
 
         <label for="email">Email</label>
@@ -36,13 +39,12 @@
                     id="password"
                     name="matKhau"
                     placeholder="Nhập mật khẩu"
-                    required
-                />
+                    required />
                 <button type="button" class="pwd-toggle" aria-label="Hiện/ẩn mật khẩu">
                     {{-- Icon SVG --}}
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" stroke="#333" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="12" cy="12" r="3" stroke="#333" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" stroke="#333" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="12" cy="12" r="3" stroke="#333" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </button>
             </div>

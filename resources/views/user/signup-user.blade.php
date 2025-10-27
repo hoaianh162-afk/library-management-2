@@ -88,7 +88,7 @@
         </main>
 
         {{-- Footer --}}
-        @include('user.layouts.footer-signup-user')
+        @include('user.layouts.footer-login-user')
     </div>
 
     <script defer src="{{ asset('js/password-toggle.js') }}"></script>

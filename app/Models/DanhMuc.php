@@ -17,7 +17,7 @@ class DanhMuc extends Model
 
     protected $fillable = ['idDanhMuc', 'tenDanhMuc', 'moTa'];
 
-    public function books()
+    public function sach()
     {
         return $this->hasMany(Sach::class, 'idDanhMuc', 'idDanhMuc');
     }

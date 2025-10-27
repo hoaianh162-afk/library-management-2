@@ -32,7 +32,7 @@
     <div class="reader-filter-container">
         <div class="search-box">
             <img src="{{ asset('images/iconstack.io - (Search)-grey.png') }}">
-            <input type="text" id="searchReader" placeholder="Tìm kiếm theo mã, tên, email...">
+            <input type="text" id="searchReader" placeholder="Tìm kiếm theo mã, tên, email, SDT...">
         </div>
     </div>
 
