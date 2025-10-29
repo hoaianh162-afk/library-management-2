@@ -136,25 +136,41 @@
   </div>
 
   {{-- Scripts --}}
-  <script>
+  <!-- <script>
     const form = document.getElementById('changePasswordForm');
     console.log('Form:', form);
     form?.addEventListener('submit', function(e) {
       e.preventDefault();
       alert('Đổi mật khẩu thành công ✅');
     });
-  </script>
+  </script> -->
   <script src="{{ asset('js/password-toggle.js') }}"></script>
   <script>
     document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
-      e.preventDefault(); 
+      e.preventDefault();
 
       const form = e.target;
       const data = new FormData(form);
       const messageBox = document.getElementById('messageBox');
 
+      const oldPassword = form.querySelector('input[name="current_password"]').value.trim();
+      const newPassword = form.querySelector('input[name="new_password"]').value.trim();
+      const confirmPassword = form.querySelector('input[name="new_password_confirmation"]').value.trim();
+
       messageBox.textContent = '';
       messageBox.className = 'message';
+
+      if (newPassword === oldPassword) {
+        messageBox.textContent = '⚠️ Mật khẩu mới không được trùng với mật khẩu cũ.';
+        messageBox.classList.add('error');
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        messageBox.textContent = '⚠️ Xác nhận mật khẩu không khớp.';
+        messageBox.classList.add('error');
+        return;
+      }
 
       messageBox.textContent = '⏳ Đang xử lý, vui lòng chờ...';
       messageBox.classList.add('info');
@@ -175,7 +191,6 @@
         if (result.success) {
           messageBox.textContent = result.message || '✅ Đổi mật khẩu thành công.';
           messageBox.className = 'message success';
-
           form.reset();
 
           if (result.redirect) {
@@ -187,6 +202,7 @@
           messageBox.textContent = result.message || '❌ Đổi mật khẩu thất bại.';
           messageBox.className = 'message error';
         }
+
       } catch (error) {
         console.error(error);
         messageBox.textContent = '⚠️ Không thể kết nối tới máy chủ. Vui lòng thử lại.';
@@ -194,6 +210,7 @@
       }
     });
   </script>
+
 
   {{-- Popup User Info --}}
 
