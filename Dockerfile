@@ -46,9 +46,6 @@ RUN apt-get update && apt-get install -y \
 # Copy code + vendor từ stage vendor
 COPY --from=vendor /app /var/www/html
 
-# Copy build frontend (nếu có)
-COPY --from=frontend /app/public/build /var/www/html/public/build 2>/dev/null || true
-
 # Quyền ghi cho storage và bootstrap/cache
 RUN chown -R www-data:www-data storage bootstrap/cache || true \
  && chmod -R 775 storage bootstrap/cache || true
