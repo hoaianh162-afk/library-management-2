@@ -96,11 +96,15 @@
     function showPopup(message) {
       popupMessage.textContent = message;
       popup.style.display = 'block';
-      setTimeout(() => popup.style.display = 'none', 2000); // tự tắt sau 2s
+      setTimeout(() => popup.style.display = 'none', 5000);
     }
 
-    function handleAction(idChiTiet, status) {
-      fetch(`/admin/approve-return/${idChiTiet}`, {
+    function handleAction(idChiTiet, type, status) {
+      const url = type === 'borrow' ?
+        `/admin/approve-borrow/${idChiTiet}` :
+        `/admin/approve-return/${idChiTiet}`;
+
+      fetch(url, {
           method: 'POST',
           headers: {
             'X-CSRF-TOKEN': token,
@@ -117,15 +121,18 @@
           const row = document.getElementById(`row-${idChiTiet}`);
           if (row) row.remove();
         })
-
         .catch(err => console.error(err));
     }
 
     document.querySelectorAll('.icon-tick').forEach(el => {
       el.addEventListener('click', () => {
         const idChiTiet = el.dataset.id;
-        handleAction(idChiTiet, 'approved');
+        const type = el.closest('tr').querySelector('td:nth-child(4) .sta').classList.contains('borrow') ?
+          'borrow' :
+          'return';
+        handleAction(idChiTiet, type, 'approved');
       });
+
     });
 
     document.querySelectorAll('.icon-x').forEach(el => {

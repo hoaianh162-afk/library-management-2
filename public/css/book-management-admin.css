@@ -13,8 +13,8 @@ body {
 
 .container {
   display: flex;
-  min-height: 100vh;   
-  height: auto; 
+  min-height: 100vh;
+  height: auto;
 }
 
 /* Tổng thể bảng */
@@ -49,8 +49,8 @@ body {
 
 .btn-add-book:hover {
   opacity: 0.9;
-  background: #fff6e6; 
-  color: #e69215; 
+  background: #fff6e6;
+  color: #e69215;
   transform: scale(1.04);
 }
 
@@ -72,12 +72,12 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   background: white;
-  width: 450px;
+  width: 655px;
   border-radius: 12px;
   padding: 35px 40px;
   display: none;
   z-index: 10000;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
 .modal-header {
@@ -98,7 +98,50 @@ body {
   cursor: pointer;
 }
 
+.modal-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
 .modal-body label {
+  display: block;
+  margin: 6px 0 4px;
+  font-weight: 500;
+}
+
+.modal-body input,
+.modal-body select,
+.modal-body textarea {
+  width: 280px;
+  padding: 10px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.modal-body textarea {
+  max-height: 150px;
+  max-width: 280px;
+  min-height: 100px;
+  min-width: 280px;
+}
+
+.modal-body input:focus,
+.modal-body select:focus,
+.modal-body textarea:focus {
+  border-color: #ff9f43;
+  box-shadow: 0 0 3px rgba(255, 159, 67, 0.5);
+}
+
+.modal-body textarea.full-width {
+  grid-column: span 2;
+}
+
+
+/* .modal-body label {
   display: block;
   margin: 12px 0 6px;
   font-weight: 500;
@@ -110,14 +153,14 @@ body {
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 16px;
-}
+} */
 
 .modal-footer {
   text-align: right;
   margin-top: 20px;
 }
 
-.modal-body input{
+/* .modal-body input{
   width: 100%;
   padding: 12px;
   border: 1.5px solid #ddd;
@@ -130,7 +173,7 @@ body {
 .modal-body input:focus { 
   border-color: #ff9f43;
   box-shadow: 0 0 3px rgba(255, 159, 67, 0.5);
-}
+} */
 
 .btn-cancel {
   background: #f1f1f1;
@@ -144,8 +187,8 @@ body {
 
 .btn-cancel:hover {
   opacity: 0.9;
-  background: #7d7d7d; 
-  color: #ffffff; 
+  background: #7d7d7d;
+  color: #ffffff;
   transform: scale(1.04);
 }
 
@@ -161,14 +204,14 @@ body {
 
 .btn-submit:hover {
   opacity: 0.9;
-  background: #fff6e6; 
-  color: #e69215; 
+  background: #fff6e6;
+  color: #e69215;
   transform: scale(1.04);
 }
 
 /* Popup Xóa sách */
 .modal-delete {
-  display: none; 
+  display: none;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -186,7 +229,8 @@ body {
 .modal-delete h2 {
   font-size: 23px;
   font-weight: 700;
-  color: #d63031; /* màu đỏ cảnh báo */
+  color: #d63031;
+  /* màu đỏ cảnh báo */
   margin-bottom: 15px;
 }
 
@@ -216,7 +260,7 @@ body {
 }
 
 .modal-delete .btn-cancel:hover {
-  background: #7d7d7d; 
+  background: #7d7d7d;
   color: white;
   transform: scale(1.04);
 }
@@ -244,10 +288,10 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #ffffff; 
+  background-color: #ffffff;
   border-radius: 15px;
 
-  margin: 6px auto;  
+  margin: 6px auto;
   border: 1px solid #cfcfcf;
   padding: 25px 30px;
   width: 1155px;
@@ -313,36 +357,36 @@ body {
   margin: 20px auto;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .table-scroll {
-  max-height: 400px; 
-  overflow-y: auto;  
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .book-table {
   table-layout: fixed;
   width: 100%;
-  border-collapse: collapse; 
+  border-collapse: collapse;
   font-size: 15px;
   color: #000000;
   background-color: #ffffff;
-  
+
 }
 
 .book-table thead {
-  background-color: #F1F1F1; 
+  background-color: #F1F1F1;
   font-weight: bold;
-  position: sticky;          
-  top: 0;                   
-  z-index: 2; 
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
-.book-table th, 
+.book-table th,
 .book-table td {
-  word-wrap: break-word; 
-  white-space: normal;   
+  word-wrap: break-word;
+  white-space: normal;
   text-align: left;
   padding: 14px 16px;
 }
@@ -355,59 +399,59 @@ body {
   font-size: 14px;
   text-transform: uppercase;
   color: #000000;
-  border-bottom: 1px solid #d1d1d1; 
+  border-bottom: 1px solid #d1d1d1;
 }
 
-.book-table th:last-child{
-  border-top: none;  
+.book-table th:last-child {
+  border-top: none;
 }
 
-.book-table tbody tr{
-  border-bottom: 1px solid #d1d1d1; 
+.book-table tbody tr {
+  border-bottom: 1px solid #d1d1d1;
 }
 
 .book-table tbody tr:last-child {
   border-bottom: none;
 }
 
-.book-table td:nth-last-child(-n+2),
-.book-table th:nth-last-child(-n+2) {
+.book-table td:nth-last-child(-n+3),
+.book-table th:nth-last-child(-n+3) {
   text-align: center;
   vertical-align: middle;
 }
 
 .actions {
+  margin-top: 12px;
   display: flex;
   gap: 12px;
-  font-size: 18px;
-  margin-left: 40px;
+  font-size: 25px;
+  margin-left: 10px;
 }
 
 /* 2 nút edit, delete */
 .edit-icon {
   width: 23px;
   height: 23px;
-  color: #007bff; 
+  color: #007bff;
   cursor: pointer;
   transition: 0.3s;
-  margin-left: 12px;
+  margin-left: 10px;
 }
 
 .edit-icon:hover {
-  color: #0056b3; 
+  color: #0056b3;
   transform: scale(1.1);
 }
 
 .delete-icon {
   width: 23px;
   height: 23px;
-  color: #e74c3c; 
+  color: #e74c3c;
   cursor: pointer;
   transition: 0.3s;
 }
 
 .delete-icon:hover {
-  color: #c0392b; 
-  transform: scale(1.1); 
+  color: #c0392b;
+  transform: scale(1.1);
 }
-

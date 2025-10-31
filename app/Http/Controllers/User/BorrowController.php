@@ -76,7 +76,6 @@ class BorrowController extends Controller
         return view('user.content-mtra-sachdangmuon', compact('muonChiTiets', 'soSachDangMuon', 'activeTab', 'books'));
     }
 
-    // Nội dung tab Mượn sách mới (AJAX)
     public function contentMuonSachMoi()
     {
         $user = Auth::user();
@@ -114,7 +113,6 @@ class BorrowController extends Controller
         $dueDate = Carbon::parse($chiTiet->due_date);
         $borrowDate = Carbon::parse($chiTiet->borrow_date);
 
-        // --- Xử lý nếu trả trễ ---
         if ($returnDate->gt($dueDate)) {
             $soNgayTre = ceil($dueDate->diffInHours($returnDate) / 24);
             $soTienPhat = $soNgayTre * 5000;
@@ -143,7 +141,7 @@ class BorrowController extends Controller
         // --- Cập nhật chi tiết phiếu mượn ---
         try {
             $chiTiet->update([
-                'trangThaiCT' => 'pending', 
+                'trangThaiCT' => 'pending',
                 'ghiChu' => 'return',
                 'return_date' => $returnDate,
             ]);
@@ -159,7 +157,7 @@ class BorrowController extends Controller
             'ngayTra' => $returnDate,
             'ngayMuon' => $borrowDate,
             'hanTra' => $dueDate,
-            'trangThai' => 'pending', 
+            'trangThai' => 'pending',
             'ghiChu' => "Đang chờ xử lý.",
         ]);
 
@@ -210,6 +208,22 @@ class BorrowController extends Controller
     {
         $user = Auth::user();
         $userId = $user->idNguoiDung;
+
+        $alreadyBorrowed = PhieuMuonChiTiet::whereHas('phieuMuon', function ($q) use ($userId) {
+            $q->where('idNguoiDung', $userId);
+        })->where('idSach', $idSach)
+            ->whereIn('trangThaiCT', ['pending', 'approved']) 
+            ->where('ghiChu', 'borrow')
+            ->whereNull('return_date')
+            ->exists();
+
+        if ($alreadyBorrowed) {
+            return response()->json([
+                'success' => false,
+                'message' => '❌ Bạn đã mượn cuốn sách này rồi.'
+            ]);
+        }
+
         $today = Carbon::today();
         $dueDate = $today->copy()->addDays(14);
 
@@ -247,7 +261,10 @@ class BorrowController extends Controller
             ]);
         });
 
-        return response()->json(['message' => 'Yêu cầu mượn sách đã được gửi, vui lòng chờ quản trị viên duyệt.']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Yêu cầu mượn sách đã được gửi, vui lòng chờ quản trị viên duyệt.'
+        ]);
     }
 
     // Action đặt chỗ
@@ -256,6 +273,20 @@ class BorrowController extends Controller
         $user = Auth::user();
         $userId = $user->idNguoiDung;
         $today = Carbon::today();
+
+        $alreadyReserved = DB::table('dat_cho')
+            ->where('idNguoiDung', $userId)
+            ->where('idSach', $idSach)
+            ->where('status', 'active')
+            ->exists();
+
+        if ($alreadyReserved) {
+            return response()->json([
+                'success' => false,
+                'message' => '❌ Bạn đã đặt chỗ sách này rồi.'
+            ]);
+        }
+
         $queueOrder = DB::table('dat_cho')->where('idSach', $idSach)->count() + 1;
         $expireDate = $today->copy()->addDays(14);
 
@@ -264,7 +295,7 @@ class BorrowController extends Controller
             'idSach' => $idSach,
             'ngayDat' => $today,
             'queueOrder' => $queueOrder,
-            'status' => 'waiting',
+            'status' => 'active',
             'thoiGianHetHan' => $expireDate,
             'created_at' => now(),
             'updated_at' => now()
@@ -281,6 +312,9 @@ class BorrowController extends Controller
             'trangThai' => 'unread'
         ]);
 
-        return response()->json(['message' => 'Bạn đã đặt chỗ sách thành công!']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Bạn đã đặt chỗ sách thành công!'
+        ]);
     }
 }

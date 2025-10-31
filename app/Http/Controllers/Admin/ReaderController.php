@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ReadersExport;
+use Illuminate\Support\Facades\Log;
 
 
 class ReaderController extends Controller
@@ -20,11 +21,11 @@ class ReaderController extends Controller
     {
         $keyword = $request->input('keyword', '');
         $readers = NguoiDung::where('vaiTro', 'reader')
-            ->when($keyword, function($query, $keyword) {
-                $query->where(function($q) use ($keyword) {
+            ->when($keyword, function ($query, $keyword) {
+                $query->where(function ($q) use ($keyword) {
                     $q->where('idNguoiDung', 'like', "%$keyword%")
-                      ->orWhere('hoTen', 'like', "%$keyword%")
-                      ->orWhere('email', 'like', "%$keyword%");
+                        ->orWhere('hoTen', 'like', "%$keyword%")
+                        ->orWhere('email', 'like', "%$keyword%");
                 });
             })
             ->orderBy('idNguoiDung', 'asc')
@@ -63,5 +64,66 @@ class ReaderController extends Controller
     public function export()
     {
         return Excel::download(new ReadersExport, 'danh_sach_doc_gia.xlsx');
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $reader = NguoiDung::find($id);
+
+            if (!$reader) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy độc giả.'
+                ], 404);
+            }
+
+            $reader->hoTen = $request->hoTen;
+            $reader->email = $request->email;
+            $reader->soDienThoai = $request->soDienThoai;
+            $reader->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cập nhật thành công.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Lỗi cập nhật độc giả: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi server: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Xóa độc giả
+     */
+    public function destroy($id)
+    {
+        try {
+            $reader = NguoiDung::find($id);
+
+            if (!$reader || $reader->vaiTro !== 'reader') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy độc giả hoặc không hợp lệ.'
+                ], 404);
+            }
+
+            $reader->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã xóa độc giả thành công.'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Lỗi xóa độc giả: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi server: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

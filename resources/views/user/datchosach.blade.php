@@ -35,174 +35,172 @@
 
 
   <script>
-      function toggleNotifications() {
-        const popup = document.getElementById("notificationPopup");
-        popup.classList.toggle("active");
+    function toggleNotifications() {
+      const popup = document.getElementById("notificationPopup");
+      popup.classList.toggle("active");
 
-        document.querySelectorAll('.notification-item.unread').forEach(item => {
-          const id = item.dataset.id;
-          fetch(`/notification/read/${id}`, {
-            method: 'POST',
-            headers: {
-              'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-          }).then(() => {
-            item.classList.remove('unread');
-          });
+      document.querySelectorAll('.notification-item.unread').forEach(item => {
+        const id = item.dataset.id;
+        fetch(`/notification/read/${id}`, {
+          method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+          }
+        }).then(() => {
+          item.classList.remove('unread');
         });
+      });
+    }
+  </script>
+
+  <!-- nút tài khoản -->
+  <script>
+    function togglePopup() {
+      const popup = document.getElementById("userPopup");
+      popup.style.display = popup.style.display === "block" ? "none" : "block";
+    }
+
+    window.onclick = function(event) {
+      if (!event.target.closest('.user-box') && !event.target.closest('#userPopup')) {
+        document.getElementById("userPopup").style.display = "none";
       }
-    </script>
+    }
+  </script>
 
-    <!-- nút tài khoản -->
-    <script>
-      function togglePopup() {
-        const popup = document.getElementById("userPopup");
-        popup.style.display = popup.style.display === "block" ? "none" : "block";
-      }
+  <style>
+    /* popup thông báo */
+    .notification-popup {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 80px;
+      width: 320px;
+      max-height: 450px;
+      overflow-y: auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      z-index: 999;
+      transition: all 0.3s ease;
+    }
 
-      window.onclick = function(event) {
-        if (!event.target.closest('.user-box') && !event.target.closest('#userPopup')) {
-          document.getElementById("userPopup").style.display = "none";
-        }
-      }
-    </script>
+    .notification-popup.active {
+      display: block;
+    }
 
-    <style>
-      /* popup thông báo */
-      .notification-popup {
-        display: none;
-        position: absolute;
-        top: 60px;
-        right: 80px;
-        width: 320px;
-        max-height: 450px;
-        overflow-y: auto;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        padding: 15px;
-        z-index: 999;
-        transition: all 0.3s ease;
-      }
+    .notification-popup .popup-header {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      border-radius: 15px;
+      border-bottom: 1px solid #d1d5db;
+      padding-bottom: 8px;
+      text-align: center;
+      color: #333;
+    }
 
-      .notification-popup.active {
-        display: block;
-      }
+    .notification-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
 
-      .notification-popup .popup-header {
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 15px;
-        border-radius: 15px;
-        border-bottom: 1px solid #d1d5db;
-        padding-bottom: 8px;
-        text-align: center;
-        color: #333;
-      }
+    .notification-item {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+      line-height: 1.4;
+      background-color: #fff;
+      margin-bottom: 8px;
+      transition: background 0.2s ease;
+    }
 
-      .notification-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-      }
+    .notification-item.unread {
+      background-color: #fdf6e3;
+      font-weight: 600;
+    }
 
-      .notification-item {
-        padding: 10px 12px;
-        border-radius: 10px;
-        border-bottom: 1px solid #eee;
-        font-size: 14px;
-        line-height: 1.4;
-        background-color: #fff;
-        margin-bottom: 8px;
-        transition: background 0.2s ease;
-      }
+    .notification-item small {
+      display: block;
+      color: #555;
+      font-size: 12px;
+      margin-top: 2px;
+    }
 
-      .notification-item.unread {
-        background-color: #fdf6e3;
-        font-weight: 600;
-      }
+    .notification-item .time {
+      display: block;
+      color: #999;
+      font-size: 11px;
+      margin-top: 4px;
+    }
 
-      .notification-item small {
-        display: block;
-        color: #555;
-        font-size: 12px;
-        margin-top: 2px;
-      }
+    .notification-item:hover {
+      background-color: #f5f5f5;
+      cursor: default;
+    }
 
-      .notification-item .time {
-        display: block;
-        color: #999;
-        font-size: 11px;
-        margin-top: 4px;
-      }
-
-      .notification-item:hover {
-        background-color: #f5f5f5;
-        cursor: default;
-      }
-
-      .no-noti {
-        text-align: center;
-        color: #777;
-        padding: 20px 0;
-        font-size: 14px;
-      }
+    .no-noti {
+      text-align: center;
+      color: #777;
+      padding: 20px 0;
+      font-size: 14px;
+    }
 
 
-      /* nút logout */
-      .popup-item.logout-ee{
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 15px;
-        cursor: pointer;
+    /* nút logout */
+    .popup-item.logout-ee {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      cursor: pointer;
 
-        padding-top: 22px;
-        padding-bottom: 22px;
-        border-color: #ffffffff;
-        background-color: #fecdcdff;
-        width: 100%;
-      }
+      padding-top: 22px;
+      padding-bottom: 22px;
+      border-color: #ffffffff;
+      background-color: #fecdcdff;
+      width: 100%;
+    }
 
-      .popup-item.logout-ee .icon-popup img {
-        width: 32px;
-        height: 32px;
-        object-fit: contain;
-      }
+    .popup-item.logout-ee .icon-popup img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
 
-      .popup-item.logout-ee strong {
-        color: red;
-        font-size: 18px;
-        font-weight: 700;
-        display: block;
-        margin-bottom: 2px;
-      }
+    .popup-item.logout-ee strong {
+      color: red;
+      font-size: 18px;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 2px;
+    }
 
-      .popup-item.logout-ee p {
-        color: red;
-        margin-top: 2px;
-        font-size: 14px;
-      }
+    .popup-item.logout-ee p {
+      color: red;
+      margin-top: 2px;
+      font-size: 14px;
+    }
 
-      .popup-item.logout-ee:hover {
-        background-color: #ffe1e1ff;
-        transform: translateY(-1px);
-      }
-    </style>
+    .popup-item.logout-ee:hover {
+      background-color: #ffe1e1ff;
+      transform: translateY(-1px);
+    }
+  </style>
 
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const mainContent = document.getElementById("main-content-2");
 
-      // Load tab mặc định
       fetch("{{ url('user/content-datchosach') }}", {
           credentials: 'same-origin'
         })
         .then(res => res.text())
         .then(html => mainContent.innerHTML = html);
 
-      // Event delegation cho tab
       document.addEventListener('click', function(e) {
         const tab = e.target.closest('a[data-url]');
         if (!tab) return;
@@ -220,12 +218,10 @@
     });
   </script>
 
-  {{-- Script xử lý các hành động trong tab Đặt chỗ của tôi --}}
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const mainContent = document.getElementById('main-content-2'); // container load AJAX
+      const mainContent = document.getElementById('main-content-2'); 
 
-      // Function hủy đặt chỗ
       function cancelDatCho(e) {
         const btn = e.target.closest('.rectangle-huy-dat-cho');
         if (!btn) return;
@@ -246,7 +242,7 @@
           .then(res => res.json())
           .then(data => {
             alert(data.message);
-            khung.remove(); // Xóa khung khỏi DOM
+            khung.remove(); 
           })
           .catch(err => {
             console.error(err);
@@ -254,7 +250,6 @@
           });
       }
 
-      // Function đặt chỗ (Mượn ngay)
       function reserveSach(e) {
         const btn = e.target.closest('.rectangle-muon-ngay');
         if (!btn) return;
@@ -274,13 +269,12 @@
           .then(data => {
             alert(data.message);
 
-            // Cập nhật UI trực tiếp: chuyển từ "Sẵn sàng mượn" -> "Đang chờ"
-            const statusDiv = khung.querySelector('.text-wrapper-12');
-            statusDiv.textContent = `Vị trí mới trong hàng chờ`;
-            statusDiv.className = 'text-wrapper-12 vi-tri-hang-cho';
+            // const statusDiv = khung.querySelector('.text-wrapper-12');
+            // statusDiv.textContent = `Vị trí mới trong hàng chờ`;
+            // statusDiv.className = 'text-wrapper-12 vi-tri-hang-cho';
 
-            const muonNgayBtn = khung.querySelector('.rectangle-muon-ngay');
-            if (muonNgayBtn) muonNgayBtn.remove();
+            // const muonNgayBtn = khung.querySelector('.rectangle-muon-ngay');
+            // if (muonNgayBtn) muonNgayBtn.remove();
           })
           .catch(err => {
             console.error(err);

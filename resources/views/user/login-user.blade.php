@@ -85,6 +85,10 @@
                 Chưa có tài khoản?
                 <a href="{{ url('/user/signup-user') }}">Đăng ký ngay</a>
             </p>
+
+            <p>
+                Quên mật khẩu? Gửi ngay yêu cầu đến email hoaianh1602@gmail.com
+            </p>
         </main>
 
         {{-- Footer --}}

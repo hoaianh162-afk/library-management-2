@@ -56,7 +56,7 @@ class UserAuthController extends Controller
         $request->validate([
             'fullname' => 'required|string|max:100',
             'email' => 'required|email|unique:nguoi_dung,email',
-            'phone' => 'nullable|string|max:20',
+            'phone' => 'nullable|regex:/^0\d{9}$/',
             'address' => 'nullable|string|max:255',
             'password' => 'required|string|min:6|confirmed', 
         ]);

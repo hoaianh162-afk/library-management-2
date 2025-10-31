@@ -14,7 +14,7 @@ class HomepageUserController extends Controller
     public function index()
     {
         //start
-        $tongSach = Sach::count();
+        $tongSach = Sach::sum('soLuong');
 
         $tongNguoiDung = DB::table('nguoi_dung')
             ->where('vaiTro', 'reader')
@@ -22,8 +22,8 @@ class HomepageUserController extends Controller
 
         $today = Carbon::today();
         $luotMuonHomNay = PhieuMuonChiTiet::whereDate('created_at', $today)->count();
-        
-        $sachDangMuon = PhieuMuonChiTiet::where('trangThaiCT', 'borrowed')->count();
+
+        $sachDangMuon = PhieuMuonChiTiet::where('ghiChu', 'borrow')->count();
 
         //sach yeu thich
         $sachYeuThich = Sach::withCount('muonChiTiets')

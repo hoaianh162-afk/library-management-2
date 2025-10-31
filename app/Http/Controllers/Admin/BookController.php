@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Sach;
 use App\Models\DanhMuc;
+use Illuminate\Support\Facades\DB;
 
 
 class BookController extends Controller
@@ -21,15 +22,18 @@ class BookController extends Controller
     // Thêm sách mới
     public function store(Request $request)
     {
+        $currentYear = date('Y');
+
         $request->validate([
             'maSach' => 'required|string|max:50',
             'tenSach' => 'required|string|max:200',
             'tacGia' => 'nullable|string|max:200',
-            'namXuatBan' => 'nullable|digits:4|integer',
-            'soLuong' => 'required|integer|min:1',
+            'namXuatBan' => "nullable|digits:4|integer|max:$currentYear",
+            'soLuong' => 'required|integer|min:0',
             'idDanhMuc' => 'required|exists:danh_muc,idDanhMuc',
             'moTa' => 'nullable|string',
             'vitri' => 'nullable|string|max:100',
+            'anhBia' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // tối đa 2MB
         ]);
 
         $exists = Sach::where('maSach', $request->maSach)
@@ -52,10 +56,21 @@ class BookController extends Controller
         $book->idDanhMuc = $request->idDanhMuc;
         $book->moTa = $request->moTa;
         $book->vitri = $request->vitri ?? null;
-        $book->trangThai = 'Còn sách';
+        $book->trangThai = 'available';
 
-        // Lưu vào database
+        $book->trangThai = ($request->soLuong == 0) ? 'unavailable' : 'available';
+
+        if ($request->hasFile('anhBia')) {
+            $file = $request->file('anhBia');
+            $filename = time() . '-' . preg_replace('/\s+/', '-', strtolower($file->getClientOriginalName()));
+            $file->move(public_path('images'), $filename);
+            $book->anhBia = 'images/' . $filename;
+        }
+
         $book->save();
+
+        app(\App\Http\Controllers\Admin\BorrowReturnController::class)
+            ->notifyReservedUsers($book->idSach);
 
         return response()->json([
             'success' => true,
@@ -63,7 +78,6 @@ class BookController extends Controller
             'book' => $book
         ]);
     }
-
 
     // Cập nhật sách
     public function update(Request $request, $id)
@@ -73,19 +87,42 @@ class BookController extends Controller
         $request->validate([
             'tenSach' => 'required|string|max:200',
             'tacGia' => 'nullable|string|max:200',
-            'namXuatBan' => 'nullable|digits:4|integer',
-            'soLuong' => 'required|integer|min:1',
+            'namXuatBan' => 'nullable|digits:4|integer|max:' . date('Y'),
+            'soLuong' => 'required|integer|min:0',
             'idDanhMuc' => 'required|exists:danh_muc,idDanhMuc',
             'moTa' => 'nullable|string',
             'vitri' => 'nullable|string|max:100',
-            //'trangThai' => 'required|string|max:20',
+            'anhBia' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // 2MB
         ]);
 
-        $book->update($request->all());
+        $book->tenSach = $request->tenSach;
+        $book->tacGia = $request->tacGia;
+        $book->namXuatBan = $request->namXuatBan;
+        $book->soLuong = $request->soLuong;
+        $book->idDanhMuc = $request->idDanhMuc;
+        $book->moTa = $request->moTa;
+        $book->vitri = $request->vitri;
+
+        $book->trangThai = ($request->soLuong == 0) ? 'unavailable' : 'available';
+
+        if ($request->hasFile('anhBia')) {
+            $file = $request->file('anhBia');
+            $fileName = time() . '-' . preg_replace('/\s+/', '-', strtolower($file->getClientOriginalName()));
+            $file->move(public_path('images'), $fileName);
+            $book->anhBia = 'images/' . $fileName;
+        } else if ($request->has('anhBiaOld')) {
+            $book->anhBia = $request->anhBiaOld;
+        }
+
+        $book->save();
+
+        app(\App\Http\Controllers\Admin\BorrowReturnController::class)
+            ->notifyReservedUsers($book->idSach);
 
         return response()->json([
             'success' => true,
-            'message' => 'Cập nhật sách thành công'
+            'message' => '✅ Cập nhật sách thành công',
+            'book' => $book
         ]);
     }
 
@@ -94,15 +131,32 @@ class BookController extends Controller
     {
         $book = Sach::findOrFail($id);
 
-        // Kiểm tra xem sách có phiếu mượn không
-        if ($book->muonChiTiets()->count() > 0) {
+        $reservationsCount = DB::table('dat_cho')
+            ->where('idSach', $id)
+            ->where('status', 'active')
+            ->count();
+
+        if ($reservationsCount > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể xóa sách này vì vẫn còn người đặt chỗ.'
+            ]);
+        }
+
+
+        $activeBorrows = $book->muonChiTiets()
+            ->where('ghiChu', 'borrow')
+            ->whereIn('trangThaiCT', ['pending', 'approved'])
+            ->whereNull('return_date')
+            ->count();
+
+        if ($activeBorrows > 0) {
             return response()->json([
                 'success' => false,
                 'message' => 'Không thể xóa sách này vì vẫn còn người mượn.'
             ]);
         }
 
-        // Nếu không có, xóa sách
         $book->delete();
 
         return response()->json([

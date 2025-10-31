@@ -141,7 +141,7 @@ class TrangLichSuMuonTraController extends Controller
 
         $datChos = $user->datChos()
             ->with('sach')
-            ->where('status', 'cancel')
+            ->where('status', 'approved')
             ->get();
 
         return view('user.content-datcho', compact('datChos'));

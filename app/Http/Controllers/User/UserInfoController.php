@@ -34,7 +34,7 @@ class UserInfoController extends Controller
 
         $validated = $request->validate([
             'hoTen' => 'required|string|max:100',
-            'soDienThoai' => 'nullable|string|max:20',
+            'soDienThoai' => 'nullable|regex:/^0\d{9}$/',
             'diaChi' => 'nullable|string|max:255',
         ]);
 

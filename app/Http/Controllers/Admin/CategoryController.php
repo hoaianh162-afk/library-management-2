@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DanhMuc;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class CategoryController extends Controller
@@ -38,9 +39,9 @@ class CategoryController extends Controller
             'success' => true,
             'message' => 'Thêm danh mục thành công!',
             'category' => $newCategory
-        ]);
+            ]);
     }
-
+    
 
 
     // Cập nhật danh mục
@@ -67,7 +68,7 @@ class CategoryController extends Controller
             ]);
         }
 
-        if ($category->books()->count() > 0) { // giả sử Category có relation books()
+        if ($category->sach()->count() > 0) {
             return response()->json([
                 'success' => false,
                 'message' => 'Không thể xóa danh mục vì vẫn còn sách liên quan.'

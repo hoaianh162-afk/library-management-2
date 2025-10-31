@@ -23,7 +23,7 @@ class SignupController extends Controller
         $validator = Validator::make($request->all(), [
             'hoTen' => 'required|string|max:100',
             'email' => 'required|email|unique:nguoi_dung,email',
-            'soDienThoai' => 'nullable|string|max:20',
+            'soDienThoai' => 'nullable|regex:/^0\d{9}$/',
             'diaChi' => 'nullable|string|max:255',
             'matKhau' => 'required|string|min:6|confirmed', // confirmed để khớp matKhau_confirmation
         ]);

@@ -55,18 +55,18 @@
             <div class="text-wrapper-8">{{ $datCho->sach->tenSach }}</div>
             <div class="text-wrapper-9">Tác giả: {{ $datCho->sach->tacGia }}</div>
 
-            @if($datCho->trangThai === 'dangMuon')
+            @if($datCho->status === 'approved')
             <div class="text-wrapper-10">Có sách: {{ \Carbon\Carbon::parse($datCho->ngayCoSach)->format('d/m/Y') }}</div>
             <div class="text-wrapper-11">Đã mượn: {{ \Carbon\Carbon::parse($datCho->ngayMuon)->format('d/m/Y') }}</div>
             <div class="rectangle-10 rectangle-dang-muon"></div>
             <div class="text-wrapper-12 dang-muon">Đang mượn</div>
-            @elseif($datCho->trangThai === 'dangCho')
+            <!-- @elseif($datCho->status === 'active')
             <div class="rectangle-12 rectangle-dang-cho"></div>
             <div class="text-wrapper-12 dang-cho">Đang chờ</div>
-            @elseif($datCho->trangThai === 'hetHan')
+            @else
             <div class="text-wrapper-10">Có sách: {{ \Carbon\Carbon::parse($datCho->ngayHetHan)->format('d/m/Y') }}</div>
             <div class="rectangle-8 rectangle-het-han"></div>
-            <div class="text-wrapper-12 het-han">Hết hạn</div>
+            <div class="text-wrapper-12 het-han">Hết hạn</div> -->
             @endif
           </div>
         </div>

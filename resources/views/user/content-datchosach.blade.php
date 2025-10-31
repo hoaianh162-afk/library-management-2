@@ -3,20 +3,20 @@
   <div class="group-2-choosen">
     <div class="div">
       <a class="group-6" data-url="{{ url('user/content-datchosach') }}">
-      <div class="rectangle-6">
-        <div class="text-wrapper-5">Đặt chỗ của tôi</div>
-        <div class="">
-          <img class="iconstack-io-book-2" src="{{ asset('images/iconstack.io - (Bookmark) - white.png') }}" />
+        <div class="rectangle-6">
+          <div class="text-wrapper-5">Đặt chỗ của tôi</div>
+          <div class="">
+            <img class="iconstack-io-book-2" src="{{ asset('images/iconstack.io - (Bookmark) - white.png') }}" />
+          </div>
         </div>
-      </div>
       </a>
       <a class="group-7" data-url="{{ url('user/content-sachhot') }}">
-      <div class="rectangle-7">
-        <div class="">
-          <img class="iconstack-io" src="{{ asset('images/iconstack.io - (Ic Fluent Fire 24 Regular).png') }}" />
+        <div class="rectangle-7">
+          <div class="">
+            <img class="iconstack-io" src="{{ asset('images/iconstack.io - (Ic Fluent Fire 24 Regular).png') }}" />
+          </div>
+          <div class="text-wrapper-6">Sách hot</div>
         </div>
-        <div class="text-wrapper-6">Sách hot</div>
-      </div>
       </a>
     </div>
   </div>
@@ -48,26 +48,24 @@
           </div>
 
           @php
-          $status = $datCho->status; // waiting, ready, borrowed...
+          $status = $datCho->status;
           @endphp
 
           <div class="rectangle-8"></div>
-          <div class="text-wrapper-12 
-                            {{ $status == 'waiting' ? 'vi-tri-hang-cho' : '' }}
-                            {{ $status == 'ready' ? 'san-sang-muon' : '' }}
-                            {{ $status == 'borrowed' ? 'da-muon' : '' }}">
-            {{ $status == 'waiting' ? "Vị trí {$datCho->queueOrder} trong hàng chờ" : ($status == 'ready' ? "Sẵn sàng mượn" : "Đã mượn") }}
+          <div class="text-wrapper-12 vi-tri-hang-cho">
+            Vị trí {{ $datCho->queueOrder }} trong hàng chờ
           </div>
 
+
           <div class="group-chung-lenh-dat-cho">
-            @if($status == 'waiting')
+            @if($status == 'active')
             <div class="rectangle-23 rectangle-dang-cho">
               <img class="icon-thoi-gian" src="{{ asset('images/iconstack.io - (Time).png') }}" />
               <div class="text-wrapper-23">
                 <p class="text-wrapper-dang-cho">Đang chờ</p>
               </div>
             </div>
-            @elseif($status == 'ready')
+            @elseif($status == 'approved')
             <div class="rectangle-23 rectangle-muon-ngay">
               <img class="icon-thoi-gian" src="{{ asset('images/iconstack.io - (Book) - white.png') }}" />
               <div class="text-wrapper-23">

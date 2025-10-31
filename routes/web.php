@@ -21,11 +21,10 @@ Route::get('/login', fn() => redirect()->route('admin.login-admin'))->name('logi
 
 Route::prefix('admin')->group(function () {
     Route::get('/login-admin', [AdminAuthController::class, 'showLoginForm'])
-        ->name('admin.login-admin'); // tên route = admin.login
+        ->name('admin.login-admin');
 
     Route::post('/login-admin', [AdminAuthController::class, 'login'])
-        ->name('admin.login.submit'); // tên route = admin.login.submit
-
+        ->name('admin.login.submit');
     Route::post('/logout', [AdminAuthController::class, 'logout'])
         ->name('admin.logout');
 
@@ -44,11 +43,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 use App\Http\Controllers\Admin\DashBoardController;
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('dashboard-admin', [DashBoardController::class, 'dashboard'])->name('admin.dashboard-admin');
+    Route::get('/dashboard-admin', [DashBoardController::class, 'dashboard'])
+        ->name('admin.dashboard-admin');
 });
 
-Route::get('/admin/dashboard-stats', [App\Http\Controllers\Admin\DashBoardController::class, 'stats'])
-    ->name('admin.dashboard-admin.stats');
+
 
 
 use App\Http\Controllers\Admin\SignupController;
@@ -78,7 +77,7 @@ use App\Http\Controllers\Admin\CategoryController;
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/category-management-admin', [CategoryController::class, 'index'])->name('admin.categories');
-    Route::post('/category-management-admin', [CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::post('/category-management-admin', [CategoryController::class, 'store'])->name('admin.category.store');
     Route::put('/category-management-admin/{id}', [CategoryController::class, 'update'])->name('admin.categories.update');
     Route::delete('/category-management-admin/{id}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
 });
@@ -90,6 +89,12 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/reader-management-admin', [ReaderController::class, 'index'])->name('admin.readers');
     Route::get('/reader-management-admin/export', [ReaderController::class, 'export'])->name('admin.readers.export');
     Route::put('/reader-management-admin/resetpw/{id}', [ReaderController::class, 'resetPassword'])->name('admin.readers.resetpw');
+
+    Route::put('/reader-management-admin/{id}', [ReaderController::class, 'update'])
+        ->name('admin.reader.update');
+
+    Route::delete('/reader-management-admin/{id}', [ReaderController::class, 'destroy'])
+        ->name('admin.reader.destroy');
 });
 
 use App\Http\Controllers\Admin\BorrowReturnController;
@@ -101,12 +106,15 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
     Route::post('/approve-return/{idChiTiet}', [BorrowReturnController::class, 'approveReturn'])
         ->name('admin.approve-return');
+
+    Route::post('/approve-borrow/{idChiTiet}', [BorrowReturnController::class, 'approveBorrow'])
+        ->name('admin.approve-borrow');
 });
 
 
 use App\Http\Controllers\Admin\FineMoneyController;
 
-Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function() {
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/finemoney-management-admin', [FineMoneyController::class, 'index'])
         ->name('admin.finemoney.index');
 
@@ -247,7 +255,6 @@ Route::prefix('user')->middleware(['auth'])->group(function () {
 
 use App\Http\Controllers\User\HelpController;
 
-Route::prefix('user')->middleware(['auth'])->group(function() {
+Route::prefix('user')->middleware(['auth'])->group(function () {
     Route::get('/help-user', [HelpController::class, 'index'])->name('user.help');
 });
-    

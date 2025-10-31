@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('tenSach', 200)->index();
             $table->string('tacGia', 200)->nullable();
             $table->year('namXuatBan')->nullable();
-            $table->integer('soLuong')->default(1);
+            $table->integer('soLuong')->default(0)->unsigned();
+
             $table->unsignedBigInteger('idDanhMuc');
             $table->text('moTa')->nullable();
             $table->string('vitri', 100)->nullable();

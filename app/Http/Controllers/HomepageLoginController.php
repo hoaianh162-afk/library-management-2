@@ -24,7 +24,7 @@ class HomepageLoginController extends Controller
         $danhMucs = DanhMuc::withCount('sach')->get();
 
         //start
-        $tongSach = Sach::count();
+        $tongSach = Sach::sum('soLuong');
 
         $tongNguoiDung = DB::table('nguoi_dung')
             ->where('vaiTro', 'reader')
@@ -33,7 +33,7 @@ class HomepageLoginController extends Controller
         $today = Carbon::today();
         $luotMuonHomNay = PhieuMuonChiTiet::whereDate('created_at', $today)->count();
 
-        $sachDangMuon = PhieuMuonChiTiet::where('trangThaiCT', 'borrowed')->count();
+        $sachDangMuon = PhieuMuonChiTiet::where('ghiChu', 'borrow')->count();
 
         //sach yeu thich
         $sachYeuThich = Sach::withCount('muonChiTiets')

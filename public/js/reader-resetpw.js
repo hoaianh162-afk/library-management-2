@@ -5,7 +5,7 @@ document.querySelectorAll('.reset-icon').forEach(icon => {
         const email = row.cells[2].textContent.trim();
         const defaultPassword = "12345678";
 
-        if (!confirm(`Bạn có chắc muốn đặt lại mật khẩu cho ${email} về mặc định?`)) return;
+        if (!confirm(`Bạn có chắc muốn đặt lại mật khẩu cho ${email} về mặc định [123456]?`)) return;
 
         fetch(`/admin/reader-management-admin/reset-password/${readerId}`, {
             method: 'POST',

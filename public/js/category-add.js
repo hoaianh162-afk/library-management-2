@@ -28,6 +28,25 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const formData = new FormData(addCategoryForm);
 
+        const tenDanhMuc = formData.get('tenDanhMuc').trim();
+        if (!tenDanhMuc) {
+            alert('⚠ Vui lòng nhập tên danh mục.');
+            return;
+        }
+
+        let duplicate = false;
+        document.querySelectorAll('.category-table tbody tr').forEach(row => {
+            const existingTen = row.querySelector('td:nth-child(2)').textContent.trim();
+            if (existingTen.toLowerCase() === tenDanhMuc.toLowerCase()) {
+                duplicate = true;
+            }
+        });
+
+        if (duplicate) {
+            alert('⚠ Tên danh mục đã tồn tại!');
+            return;
+        }
+
         fetch('/admin/category-management-admin', {
             method: 'POST',
             headers: {
@@ -35,18 +54,34 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: formData
         })
-            .then(res => res.json()) // chuyển sang json
+            .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    console.log('Thêm thành công:', data.category);
-                    // thêm vào table ở đây
+                    alert('✅ Thêm danh mục thành công: ' + data.category.tenDanhMuc);
+
+                    if (categoryTableBody) {
+                        const newRow = document.createElement('tr');
+                        newRow.setAttribute('data-id', data.category.idDanhMuc);
+                        newRow.innerHTML = `
+                    <td>${data.category.idDanhMuc}</td>
+                    <td>${data.category.tenDanhMuc}</td>
+                    <td>${data.category.moTa || '-'}</td>
+                    <td class="actions-edit-delete">
+                        <svg class="edit-icon">...</svg>
+                        <svg class="delete-icon">...</svg>
+                    </td>
+                `;
+                        categoryTableBody.appendChild(newRow);
+                    }
+
+                    closeAddModal();
                 } else {
-                    alert(data.message);
+                    alert('❌ Lỗi: ' + (data.message || 'Không thể thêm danh mục.'));
                 }
             })
             .catch(err => console.error('Fetch error:', err));
-
     });
+
 
     function initEditAndDeleteEvents() {
         if (typeof initEditCategoryEvents === 'function') initEditCategoryEvents();

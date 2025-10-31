@@ -11,6 +11,7 @@ use App\Models\DatCho;
 use App\Models\Sach;
 use App\Models\ThongBao;
 use App\Models\NguoiDung;
+use App\Models\PhieuMuonChiTiet;
 
 class DatChoController extends Controller
 {
@@ -34,8 +35,8 @@ class DatChoController extends Controller
         }
 
         $datChos = $user->datChos()
-            ->where('status', 'waiting') 
-            ->with('sach')              
+            ->where('status', 'active')
+            ->with('sach')
             ->get();
 
 
@@ -48,10 +49,24 @@ class DatChoController extends Controller
     public function contentSachHot()
     {
         $sachsHot = Sach::with('danhMuc')
-            ->withCount('datChos')
+            ->withCount(['datChos as dat_chos_count' => function ($query) {
+                $query->whereIn('status', ['active'])
+                    ->select(DB::raw('count(distinct idNguoiDung)'));
+            }])
+            ->where('soLuong', 0)
             ->orderByDesc('dat_chos_count')
-            ->take(10)
+            ->take(6)
             ->get();
+
+        if ($sachsHot->count() < 6) {
+            $sachsHot = Sach::with('danhMuc')
+                ->withCount(['datChos as dat_chos_count' => function ($query) {
+                    $query->whereIn('status', ['active'])
+                        ->select(DB::raw('count(distinct idNguoiDung)'));
+                }])
+                ->where('soLuong', 0)
+                ->get();
+        }
 
         return view('user.content-sachhot', compact('sachsHot'));
     }
@@ -62,6 +77,20 @@ class DatChoController extends Controller
         $user = Auth::user();
         $userId = $user->idNguoiDung;
         $today = Carbon::today();
+
+        $alreadyReserved = DB::table('dat_cho')
+            ->where('idNguoiDung', $userId)
+            ->where('idSach', $idSach)
+            ->whereIn('status', ['waiting', 'active'])
+            ->exists();
+
+        if ($alreadyReserved) {
+            return response()->json([
+                'success' => false,
+                'message' => '❌ Bạn đã đặt chỗ sách này rồi.'
+            ]);
+        }
+
         $queueOrder = DB::table('dat_cho')->where('idSach', $idSach)->count() + 1;
         $expireDate = $today->copy()->addDays(14);
 
@@ -70,7 +99,7 @@ class DatChoController extends Controller
             'idSach' => $idSach,
             'ngayDat' => $today,
             'queueOrder' => $queueOrder,
-            'status' => 'waiting',
+            'status' => 'active',
             'thoiGianHetHan' => $expireDate,
             'created_at' => now(),
             'updated_at' => now()
@@ -87,8 +116,12 @@ class DatChoController extends Controller
             'trangThai' => 'unread'
         ]);
 
-        return response()->json(['message' => 'Bạn đã đặt chỗ sách thành công!']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Bạn đã đặt chỗ sách thành công!'
+        ]);
     }
+
 
     /**
      * Action Hủy đặt chỗ
@@ -96,6 +129,7 @@ class DatChoController extends Controller
     public function cancel($idDatCho)
     {
         $user = Auth::user();
+
         $datCho = DatCho::where('idDatCho', $idDatCho)
             ->where('idNguoiDung', $user->idNguoiDung)
             ->first();
@@ -104,10 +138,8 @@ class DatChoController extends Controller
             return response()->json(['message' => 'Không tìm thấy đặt chỗ.'], 404);
         }
 
-        $datCho->status = 'cancel';
-        $datCho->save();
-
         $sach = $datCho->sach;
+
         ThongBao::create([
             'idNguoiDung' => $user->idNguoiDung,
             'idSach' => $datCho->idSach,
@@ -117,6 +149,10 @@ class DatChoController extends Controller
             'thoiGianGui' => now(),
             'trangThai' => 'unread'
         ]);
+
+        DatCho::where('idNguoiDung', $user->idNguoiDung)
+            ->where('idSach', $datCho->idSach)
+            ->delete();
 
         return response()->json(['message' => 'Bạn đã hủy đặt chỗ sách thành công!']);
     }

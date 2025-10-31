@@ -127,7 +127,6 @@
           .then(data => {
             alert(data.message);
 
-            // Cập nhật UI: hiển thị "Đang chờ" thay nút đặt chỗ
             btn.innerHTML = `<img class="icon-thoi-gian" src="{{ asset('images/iconstack.io - (Time).png') }}"/>
                              <div class="text-wrapper-23">
                                  <p class="text-wrapper-dang-cho">Đang chờ</p>
