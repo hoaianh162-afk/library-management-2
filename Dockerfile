@@ -1,25 +1,22 @@
 # ==========================================
 # 1️⃣ Stage 1: Cài PHP dependencies (Composer)
 # ==========================================
-FROM composer:2.8 AS vendor
+FROM php:8.2-cli AS vendor
 
-# Cài thêm PHP extension cần thiết trong stage này
+# Cài đặt các thư viện và composer
 RUN apt-get update && apt-get install -y \
-    libpng-dev libjpeg-dev libfreetype6-dev libzip-dev && \
+    git unzip zip libpng-dev libjpeg-dev libfreetype6-dev libzip-dev && \
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
     docker-php-ext-install gd zip && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /app
 
-# Copy composer files trước để tận dụng cache
 COPY composer.json composer.lock ./
-
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
-# Copy toàn bộ mã nguồn
 COPY . .
-
 RUN composer dump-autoload --optimize
 
 
