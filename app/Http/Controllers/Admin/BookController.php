@@ -62,7 +62,7 @@ class BookController extends Controller
 
         if ($request->hasFile('anhBia')) {
             $file = $request->file('anhBia');
-            $filename = time() . '-' . preg_replace('/\s+/', '-', strtolower($file->getClientOriginalName()));
+            $filename = preg_replace('/\s+/', '-', strtolower($file->getClientOriginalName()));
             $file->move(public_path('images'), $filename);
             $book->anhBia = 'images/' . $filename;
         }
@@ -107,9 +107,9 @@ class BookController extends Controller
 
         if ($request->hasFile('anhBia')) {
             $file = $request->file('anhBia');
-            $fileName = time() . '-' . preg_replace('/\s+/', '-', strtolower($file->getClientOriginalName()));
-            $file->move(public_path('images'), $fileName);
-            $book->anhBia = 'images/' . $fileName;
+            $filename = preg_replace('/\s+/', '-', strtolower($file->getClientOriginalName()));
+            $file->move(public_path('images'), $filename);
+            $book->anhBia = 'images/' . $filename;
         } else if ($request->has('anhBiaOld')) {
             $book->anhBia = $request->anhBiaOld;
         }
