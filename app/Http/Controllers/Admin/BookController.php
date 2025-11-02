@@ -68,6 +68,7 @@ class BookController extends Controller
             $file->move(public_path('images'), $filename);
             $book->anhBia = 'images/' . $filename;
         }
+        
 
         $book->save();
 
