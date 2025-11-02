@@ -63,7 +63,7 @@
         </div>
 
         <label>Ảnh bìa định dạng tên ví dụ : "nha-gia-kim.jpg"</label>
-        <input type="file" name="anhBia" accept="image/*">
+        <input type="file" id="addAnhBia" name="anhBia" accept="image/*">
 
       </div>
 

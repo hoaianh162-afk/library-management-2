@@ -29,10 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formData = new FormData(addBookForm);
 
-    const editAnhBia = document.querySelector('#editAnhBia'); 
+    const addAnhBia = document.querySelector('#addAnhBia'); 
 
-    if (editAnhBia.files && editAnhBia.files.length > 0) {
-      const file = editAnhBia.files[0];
+    if (addAnhBia.files && addAnhBia.files.length > 0) {
+      const file = addAnhBia.files[0];
       const allowedExtensions = ['jpg', 'jpeg', 'png'];
       const fileExt = file.name.split('.').pop().toLowerCase();
 
