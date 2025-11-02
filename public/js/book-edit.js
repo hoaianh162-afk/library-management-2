@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     editTheLoai.value = cells[5].dataset.id || '';
     editSoLuong.value = cells[6].textContent;
     editVitri.value = cells[7].textContent;
-    editAnhBiaOld.value = currentRow.dataset.anhbia || ''; 
+    editAnhBiaOld.value = currentRow.dataset.anhbia || '';
 
     editModal.style.display = 'block';
     editOverlay.style.display = 'block';
@@ -69,19 +69,19 @@ document.addEventListener('DOMContentLoaded', () => {
     formData.append('idDanhMuc', editTheLoai.value);
     formData.append('soLuong', editSoLuong.value.trim());
     formData.append('vitri', editVitri.value.trim());
-    formData.append('_method', 'PUT'); 
+    formData.append('_method', 'PUT');
     formData.append('_token', document.querySelector('input[name="_token"]').value);
 
-    if (editAnhBia.files.length > 0) {
+    if (editAnhBia.files && editAnhBia.files.length > 0) {
       const file = editAnhBia.files[0];
-      const allowedTypes = ['image/png', 'image/jpeg'];
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+
       if (!allowedTypes.includes(file.type)) {
         alert('❌ Ảnh bìa chỉ chấp nhận định dạng PNG hoặc JPG!');
         return;
       }
+
       formData.append('anhBia', file);
-    } else {
-      formData.append('anhBia', editAnhBiaOld.value);
     }
 
     formData.append('_method', 'PUT');

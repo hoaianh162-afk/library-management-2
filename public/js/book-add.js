@@ -29,14 +29,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formData = new FormData(addBookForm);
 
-    const coverFile = formData.get('anhBia');
-    if (coverFile && coverFile.name) {
+    const editAnhBia = document.querySelector('#editAnhBia'); 
+
+    if (editAnhBia.files && editAnhBia.files.length > 0) {
+      const file = editAnhBia.files[0];
       const allowedExtensions = ['jpg', 'jpeg', 'png'];
-      const fileExt = coverFile.name.split('.').pop().toLowerCase();
+      const fileExt = file.name.split('.').pop().toLowerCase();
+
       if (!allowedExtensions.includes(fileExt)) {
-        alert('Ảnh bìa chỉ được phép là JPG hoặc PNG.');
+        alert('❌ Ảnh bìa chỉ được phép là JPG hoặc PNG.');
         return;
       }
+
+      formData.append('anhBia', file);
     }
 
     const year = parseInt(formData.get('namXuatBan'));
@@ -52,14 +57,14 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       body: formData
     })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        const newBook = data.book;
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          const newBook = data.book;
 
-        const newRow = document.createElement('tr');
-        newRow.dataset.id = newBook.idSach;
-        newRow.innerHTML = `
+          const newRow = document.createElement('tr');
+          newRow.dataset.id = newBook.idSach;
+          newRow.innerHTML = `
           <td>${newBook.maSach}</td>
           <td>${newBook.tenSach}</td>
           <td>${newBook.tacGia}</td>
@@ -79,23 +84,23 @@ document.addEventListener('DOMContentLoaded', () => {
             </svg>
           </td>
         `;
-        
-        bookTableBody.appendChild(newRow);
 
-        newRow.querySelector('.edit-icon').addEventListener('click', () => {
-          openEditPopup(newRow);
-        });
-        newRow.querySelector('.delete-icon').addEventListener('click', () => {
-          openDeleteModal(newRow);
-        });
+          bookTableBody.appendChild(newRow);
 
-        alert(data.message);
-        closeAddModal();
-      } else {
-        alert(data.message);
-      }
-    })
-    .catch(err => console.error(err));
+          newRow.querySelector('.edit-icon').addEventListener('click', () => {
+            openEditPopup(newRow);
+          });
+          newRow.querySelector('.delete-icon').addEventListener('click', () => {
+            openDeleteModal(newRow);
+          });
+
+          alert(data.message);
+          closeAddModal();
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(err => console.error(err));
   });
 
   if (typeof updateDashboardStats === 'function') {
