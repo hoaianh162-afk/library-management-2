@@ -257,3 +257,27 @@ use App\Http\Controllers\User\HelpController;
 Route::prefix('user')->middleware(['auth'])->group(function () {
     Route::get('/help-user', [HelpController::class, 'index'])->name('user.help');
 });
+
+
+
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+
+Route::get('/test-cloudinary', function () {
+    try {
+        $filePath = public_path('favicon.ico');
+        $uploaded = Cloudinary::upload($filePath, [
+            'folder' => 'books/test',
+            'public_id' => 'test-upload-' . time(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'url' => $uploaded->getSecurePath(),
+        ]);
+    } catch (Exception $e) {
+        return response()->json([
+            'success' => false,
+            'error' => $e->getMessage(),
+        ]);
+    }
+});
