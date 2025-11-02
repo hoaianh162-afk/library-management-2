@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminAuthController;
 
 
-
-
 Route::get('user/signup-successful-user', fn() => view('user.signup-successful-user'));
 Route::get('user/info-user', fn() => view('user.info-user'));
 Route::get('user/setting-user', fn() => view('user.setting-user'));
