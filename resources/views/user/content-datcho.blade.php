@@ -54,6 +54,8 @@
             <div class="text-wrapper-7">Ngày đặt: {{ \Carbon\Carbon::parse($datCho->ngayDat)->format('d/m/Y') }}</div>
             <div class="text-wrapper-8">{{ $datCho->sach->tenSach }}</div>
             <div class="text-wrapper-9">Tác giả: {{ $datCho->sach->tacGia }}</div>
+
+            <div class="text-wrapper-10">Đã hủy: {{ \Carbon\Carbon::parse($datCho->update_at)->format('d/m/Y') }}</div>
             <div class="rectangle-10 rectangle-dang-muon"></div>
             <div class="text-wrapper-12 dang-muon">Đã hủy</div>
             
