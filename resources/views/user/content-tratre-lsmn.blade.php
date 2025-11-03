@@ -93,7 +93,7 @@
                 );
 
                 $soNgayTre = $isReturnedLate ? ceil($dueDate->diffInHours($returnDate) / 24) : 0;
-                $soTienPhat = $soNgayTre * 5000;
+                $soTienPhat = $chiTiet->phats->sum('soTienPhat');
                 @endphp
 
                 @if($isReturnedLate)

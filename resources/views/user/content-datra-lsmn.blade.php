@@ -98,15 +98,10 @@
                         <div class="text-wrapper-12 da-tra">Đã trả</div>
 
                         @php
-                        $returnDate = $chiTiet->return_date ? \Carbon\Carbon::parse($chiTiet->return_date) : null;
-                        $dueDate = \Carbon\Carbon::parse($chiTiet->due_date);
-                        $borrowDate = \Carbon\Carbon::parse($chiTiet->borrow_date);
-
-                        $soNgayTre = ceil($dueDate->diffInHours($returnDate) / 24);
-                        $soTienPhat = $soNgayTre * 5000;
+                        $soTienPhat = $chiTiet->phats->sum('soTienPhat');
                         @endphp
                         @if($soTienPhat > 0)
-                        <div class="text-wrapper-13">Phạt: {{ number_format($soTienPhat, 0, ',', '.') }}đ</div>
+                        <div class="text-wrapper-13">Phạt: {{ number_format($soTienPhat, 0, ',', '.') }} đ</div>
                         @endif
                     </div>
                 </div>
