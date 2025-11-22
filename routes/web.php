@@ -284,7 +284,14 @@ Route::get('/test-cloudinary', function () {
 
 use Illuminate\Support\Facades\Artisan;
 
-Route::get('/seed-admin', function() {
+Route::get('/seed-admin', function () {
+    config([
+        'database.connections.mysql.host' => env('DB_HOST'),
+        'database.connections.mysql.database' => env('DB_DATABASE'),
+        'database.connections.mysql.username' => env('DB_USERNAME'),
+        'database.connections.mysql.password' => env('DB_PASSWORD'),
+    ]);
+
     Artisan::call('db:seed', ['--class' => 'AdminSeeder']);
     return 'Seeder chạy xong!';
 });
