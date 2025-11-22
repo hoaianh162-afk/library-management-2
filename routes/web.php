@@ -281,3 +281,10 @@ Route::get('/test-cloudinary', function () {
         ]);
     }
 });
+
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/seed-admin', function() {
+    Artisan::call('db:seed', ['--class' => 'AdminSeeder']);
+    return 'Seeder chạy xong!';
+});
