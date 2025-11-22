@@ -12,7 +12,7 @@ class AdminSeeder extends Seeder
     {
         DB::table('nguoi_dung')->insert([
             'hoTen' => 'Quản trị viên 2',
-            'email' => 'admin@gmail.com',
+            'email' => 'admin2@gmail.com',
             'matKhau' => Hash::make('123456'), // Mã hoá mật khẩu
             'soDienThoai' => '0900000000',
             'diaChi' => 'Hà Nội',
