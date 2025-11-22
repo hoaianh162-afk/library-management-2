@@ -282,16 +282,30 @@ Route::get('/test-cloudinary', function () {
     }
 });
 
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 Route::get('/seed-admin', function () {
-    config([
-        'database.connections.mysql.host' => env('DB_HOST'),
-        'database.connections.mysql.database' => env('DB_DATABASE'),
-        'database.connections.mysql.username' => env('DB_USERNAME'),
-        'database.connections.mysql.password' => env('DB_PASSWORD'),
-    ]);
+    DB::table('nguoi_dung')->updateOrInsert(
+        ['email' => 'admin2@gmail.com'],
+        [
+            'hoTen' => 'Quản trị viên 2',
+            'matKhau' => Hash::make('123456'),
+            'soDienThoai' => '0900000000',
+            'diaChi' => 'Hà Nội',
+            'vaiTro' => 'admin',
+            'ngayDangKy' => now()->toDateString(),
+            'trangThai' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]
+    );
 
-    Artisan::call('db:seed', ['--class' => 'AdminSeeder']);
     return 'Seeder chạy xong!';
+});
+
+Route::get('/db-test', function () {
+    return config('database.connections.mysql.host') . ' | ' .
+           config('database.connections.mysql.database') . ' | ' .
+           config('database.connections.mysql.username');
 });
